@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+set -eE
+
+IMAGE="$(realpath "$1")"
+MOUNT="$(realpath "$2")"
+DEBOOTSTRAP="$(realpath "$3")"
+
+function cleanup {
+    set +x
+
+    # Unmount all mounted partitions
+    if [ -n "$(mount | grep "${MOUNT}")" ]
+    then
+        umount "${MOUNT}/boot/firmware"
+        umount "${MOUNT}"
+    fi
+
+    # Ensure there are no mounted partitions
+    if [ -n "$(mount | grep "${MOUNT}")" ]
+    then
+        echo "${MOUNT} still mounted" >&2
+        exit 1
+    fi
+
+    # Detach all loopback devices
+    losetup --associated "${IMAGE}" | cut -d ':' -f1 | while read LODEV
+    do
+        losetup --detach "${LODEV}"
+    done
+
+    # Ensure there are no attached loopback devices
+    losetup --associated "${IMAGE}" | cut -d ':' -f1 | while read LODEV
+    do
+        echo "${IMAGE} still has loopback device ${LODEV}" >&2
+        exit 1
+    done
+}
+
+# Run cleanup on error
+trap cleanup ERR
+
+# Run cleanup prior to the script
+cleanup
+
+# Remove old mount
+rm --recursive --one-file-system "${MOUNT}"
+
+# Remove old image
+rm --recursive --force --verbose "${IMAGE}"
+
+set -x
+
+# Allocate image (4GiB)
+fallocate --verbose --length 4GiB "${IMAGE}"
+
+# Partition image
+parted "${IMAGE}" mktable msdos
+parted "${IMAGE}" mkpart primary fat32 1MiB 256MiB
+parted "${IMAGE}" set 1 boot on
+parted "${IMAGE}" mkpart primary ext4 256MiB 100%
+
+# Loopback mount image file
+LODEV="$(losetup --find --show --partscan "${IMAGE}")"
+
+# Format boot partition
+#TODO: other parameters?
+mkfs.vfat "${LODEV}p1"
+
+# Format root partition
+#TODO: other parameters?
+mkfs.ext4 "${LODEV}p2"
+
+# Create mount directory
+mkdir -pv "${MOUNT}"
+
+# Mount root partition
+mount "${LODEV}p2" "${MOUNT}"
+
+# Copy debootstrap
+rsync \
+    --archive \
+    --acls \
+    --hard-links \
+    --numeric-ids \
+    --sparse \
+    --whole-file \
+    --xattrs \
+    --stats \
+    "${DEBOOTSTRAP}/" "${MOUNT}/"
+
+# Copy modified configuration files
+rsync \
+    --recursive \
+    --verbose \
+    "data/etc/" \
+    "${MOUNT}/etc/"
+
+# Mount boot partition
+mkdir -p "${MOUNT}/boot/firmware"
+mount "${LODEV}p1" "${MOUNT}/boot/firmware"
+
+#TODO: copy boot firmware
+
+# Copy chroot script
+cp -v data/chroot.sh "${MOUNT}/chroot.sh"
+
+# Run chroot script in container
+systemd-nspawn \
+	--machine=pop-os \
+	--resolv-conf=off \
+	--directory="${MOUNT}" \
+    bash /chroot.sh
+
+# Remove chroot script
+rm -v "${MOUNT}/chroot.sh"
+
+# Run cleanup after the script
+cleanup

@@ -14,7 +14,7 @@ apt-get update
 apt-get dist-upgrade --yes
 
 # Install default packages
-apt-get install \
+apt-get install --yes \
     linux-raspi \
     pop-default-settings
 
