@@ -12,7 +12,7 @@ clean:
 	sudo rm -f "$(BUILD)/raspi.img"
 
 	# Remove zip file
-	rm "$(BUILD)/raspi.zip" "$(BUILD)/raspi.zip.partial"
+	rm -f "$(BUILD)/raspi.zip" "$(BUILD)/raspi.zip.partial"
 
 distclean: clean
 	# Remove debootstrap directory
