@@ -19,11 +19,14 @@ distclean: clean
 	sudo rm -rf --one-file-system "$(BUILD)/debootstrap" "$(BUILD)/debootstrap.partial"
 
 deps:
+	if [ ! -f /usr/sbin/debootstrap ]; then \
+		sudo apt-get install --yes debootstrap; \
+	fi
 	if [ ! -f /usr/bin/systemd-nspawn ]; then \
 		sudo apt-get install --yes systemd-container; \
 	fi
-	if [ ! -f /usr/sbin/debootstrap ]; then \
-		sudo apt-get install --yes debootstrap; \
+	if [ ! -f /usr/bin/zip ]; then \
+		sudo apt-get install --yes zip; \
 	fi
 
 $(BUILD)/debootstrap:
