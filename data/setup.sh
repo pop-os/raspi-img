@@ -13,8 +13,10 @@ fi
 apt-get update
 apt-get dist-upgrade --yes
 
-# Install Pop defeault settings
-apt-get install pop-default-settings
+# Install default packages
+apt-get install \
+    linux-raspi \
+    pop-default-settings
 
 bash
 
