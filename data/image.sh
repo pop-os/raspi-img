@@ -2,6 +2,11 @@
 
 set -eE
 
+if [ -z "$1" -o -z "$2" -o ! -d "$3" ]
+then
+    echo "$0 [image] [mount] [debootstrap]" >&2
+    exit 1
+fi
 IMAGE="$(realpath "$1")"
 MOUNT="$(realpath "$2")"
 DEBOOTSTRAP="$(realpath "$3")"
@@ -100,7 +105,12 @@ rsync \
 mkdir -p "${MOUNT}/boot/firmware"
 mount "${LODEV}p1" "${MOUNT}/boot/firmware"
 
-#TODO: copy boot firmware
+# Copy modified firmware files
+rsync \
+    --recursive \
+    --verbose \
+    "data/boot/firmware/" \
+    "${MOUNT}/boot/firmware/"
 
 # Copy chroot script
 cp -v data/chroot.sh "${MOUNT}/chroot.sh"

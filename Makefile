@@ -40,6 +40,7 @@ $(BUILD)/debootstrap:
 		false; \
 	fi
 
+	# Mark as complete
 	sudo touch "$@.partial"
 	sudo mv "$@.partial" "$@"
 
@@ -47,5 +48,6 @@ $(BUILD)/raspi.img: $(BUILD)/debootstrap
 	# Create image
 	sudo data/image.sh "$@.partial" "$(BUILD)/mount" "$<"
 
+	# Mark as complete
 	sudo touch "$@.partial"
 	sudo mv "$@.partial" "$@"
