@@ -70,11 +70,11 @@ LODEV="$(losetup --find --show --partscan "${IMAGE}")"
 
 # Format boot partition
 #TODO: other parameters?
-mkfs.vfat "${LODEV}p1"
+mkfs.vfat -n system-boot "${LODEV}p1"
 
 # Format root partition
 #TODO: other parameters?
-mkfs.ext4 "${LODEV}p2"
+mkfs.ext4 -L writable "${LODEV}p2"
 
 # Create mount directory
 mkdir -pv "${MOUNT}"
