@@ -37,8 +37,6 @@ cp --verbose /usr/lib/u-boot/rpi_3/u-boot.bin /boot/firmware/uboot_rpi_3.bin
 cp --verbose /usr/lib/u-boot/rpi_4/u-boot.bin /boot/firmware/uboot_rpi_4.bin
 cp --verbose /usr/lib/u-boot/rpi_arm64/u-boot.bin /boot/firmware/uboot_rpi_arm64.bin
 
-bash
-
 # Clean apt caches
 apt-get autoremove --purge --yes
 apt-get autoclean
