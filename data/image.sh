@@ -49,7 +49,7 @@ trap cleanup ERR
 cleanup
 
 # Remove old mount
-rm --recursive --one-file-system "${MOUNT}"
+rm --recursive --force --one-file-system "${MOUNT}"
 
 # Remove old image
 rm --recursive --force --verbose "${IMAGE}"
