@@ -56,8 +56,8 @@ rm --recursive --force --verbose "${IMAGE}"
 
 set -x
 
-# Allocate image (4GiB)
-fallocate --verbose --length 4GiB "${IMAGE}"
+# Allocate image (8GiB)
+fallocate --verbose --length 8GiB "${IMAGE}"
 
 # Partition image
 parted "${IMAGE}" mktable msdos
