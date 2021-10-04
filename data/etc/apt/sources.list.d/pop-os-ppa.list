@@ -1,6 +1,2 @@
 deb http://apt.pop-os.org/release impish main
 deb-src http://apt.pop-os.org/release impish main
-
-#TODO: REMOVE AFTER ARM64 FIXES RELEASED
-deb http://apt.pop-os.org/staging/arm64 impish main
-deb-src http://apt.pop-os.org/staging/arm64 impish main
