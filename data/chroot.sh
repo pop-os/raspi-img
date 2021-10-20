@@ -31,3 +31,6 @@ cp --verbose /usr/lib/linux-firmware-raspi2/* /boot/firmware/
 cp --verbose /usr/lib/u-boot/rpi_3/u-boot.bin /boot/firmware/uboot_rpi_3.bin
 cp --verbose /usr/lib/u-boot/rpi_4/u-boot.bin /boot/firmware/uboot_rpi_4.bin
 cp --verbose /usr/lib/u-boot/rpi_arm64/u-boot.bin /boot/firmware/uboot_rpi_arm64.bin
+
+# Create missing network-manager file
+touch /etc/NetworkManager/conf.d/10-globally-managed-devices.conf
