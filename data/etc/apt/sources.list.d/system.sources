@@ -2,6 +2,6 @@ X-Repolib-Name: Pop_OS System Sources
 Enabled: yes
 Types: deb deb-src
 URIs: http://ports.ubuntu.com/ubuntu-ports/
-Suites: impish impish-security impish-updates impish-backports
+Suites: jammy jammy-security jammy-updates jammy-backports
 Components: main restricted universe multiverse
 X-Repolib-Default-Mirror: http://ports.ubuntu.com/ubuntu-ports/
