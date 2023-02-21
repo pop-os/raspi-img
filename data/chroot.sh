@@ -15,6 +15,7 @@ apt-get dist-upgrade --yes
 
 # Install distribution packages
 apt-get install --yes \
+    -o Dpkg::Options::="--force-confnew" \
     pop-desktop-raspi
 
 # Clean apt caches
