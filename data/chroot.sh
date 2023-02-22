@@ -11,7 +11,8 @@ fi
 
 # Update and upgrade prior to installing Pop default settings
 apt-get update
-apt-get dist-upgrade --yes
+apt-get dist-upgrade --yes \
+    -o Dpkg::Options::="--force-confnew"
 
 # Install distribution packages
 apt-get install --yes \
