@@ -12,7 +12,7 @@ clean:
 	sudo rm -f "$(BUILD)/raspi.img"
 
 	# Remove compressed file
-	rm -f "$(BUILD)/raspi.img.xz" "$(BUILD)/raspi.img.xz.partial" \
+	rm -f "$(BUILD)/raspi.img.xz" "$(BUILD)/raspi.img.xz.partial"; \
 	if [ "$$?" -ne "0" ]; then \
 		mv "$(BUILD)" "/tmp/$(BUILD)-to-be-deleted"; \
 	fi
