@@ -1,8 +1,12 @@
 ARCH=arm64
-UBUNTU_CODE=jammy
-UBUNTU_MIRROR=http://ports.ubuntu.com/ubuntu-ports
+UBUNTU_CODE?=noble
+UBUNTU_MIRROR?=http://ports.ubuntu.com/ubuntu-ports
 
 BUILD=build/$(UBUNTU_CODE)
+
+SED=\
+	s|UBUNTU_CODE|$(UBUNTU_CODE)|g; \
+	s|UBUNTU_MIRROR|$(UBUNTU_MIRROR)|g
 
 all: $(BUILD)/raspi.img.xz
 
@@ -54,8 +58,14 @@ $(BUILD)/debootstrap:
 	sudo mv "$@.partial" "$@"
 
 $(BUILD)/raspi.img: $(BUILD)/debootstrap
+	# Generate templates
+	rm -rf "data/etc/apt/sources.list.d"
+	mkdir -p "data/etc/apt/sources.list.d"
+	sed "$(SED)" "data/template/pop-os-release.sources" > "data/etc/apt/sources.list.d/pop-os-release.sources"
+	sed "$(SED)" "data/template/system.sources" > "data/etc/apt/sources.list.d/system.sources"
+
 	# Create image
-	sudo data/image.sh "$@.partial" "$(BUILD)/mount" "$<"
+	sudo data/image.sh "$@.partial" "$(BUILD)/mount" "$<" "$(UBUNTU_CODE)" "$(UBUNTU_MIRROR)"
 
 	# Mark as complete
 	sudo touch "$@.partial"

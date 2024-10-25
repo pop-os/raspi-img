@@ -1,0 +1,7 @@
+X-Repolib-Name: Pop_OS System Sources
+Enabled: yes
+Types: deb deb-src
+URIs: UBUNTU_MIRROR
+Suites: UBUNTU_CODE UBUNTU_CODE-security UBUNTU_CODE-updates UBUNTU_CODE-backports
+Components: main restricted universe multiverse
+X-Repolib-Default-Mirror: UBUNTU_MIRROR
